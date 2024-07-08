@@ -1,0 +1,15 @@
+Idle.png
+size:512,128
+repeat:none
+idle001
+bounds:2,2,78,91
+idle002
+bounds:84,2,78,91
+idle003
+bounds:166,2,80,89
+idle004
+bounds:248,2,80,87
+idle005
+bounds:330,2,78,88
+idle006
+bounds:412,2,78,91

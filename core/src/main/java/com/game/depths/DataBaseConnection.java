@@ -1,12 +1,14 @@
 package com.game.depths;
 
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DataBaseConnection {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/juego_poo"; // Cambia a tu URL de conexión
+    private static final String URL = "jdbc:mysql://localhost:3306/depths of magic"; // Cambia a tu URL de conexión
     private static final String USER = "root"; // Cambia a tu usuario de MySQL
-    private static final String PASSWORD = "agusbenja29"; // Cambia a tu contraseña de MySQL
+    private static final String PASSWORD = ""; // Cambia a tu contraseña de MySQL
     private static Connection connection = null;
 
     public static Connection getConnection() throws SQLException {
@@ -17,8 +19,7 @@ public class DataBaseConnection {
                 connection = DriverManager.getConnection(URL, USER, PASSWORD);
                 System.out.println("Conexión a la base de datos establecida.");
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-                throw new SQLException("Controlador JDBC de MySQL no encontrado.");
+                System.out.println("Controlador JDBC de MySQL no encontrado.");
             }
         }
         return connection;
@@ -30,7 +31,7 @@ public class DataBaseConnection {
                 connection.close();
                 System.out.println("Conexión a la base de datos cerrada.");
             } catch (SQLException e) {
-                e.printStackTrace();
+                System.out.println("Error en cerrar la conexión");
             }
         }
     }
@@ -47,5 +48,21 @@ public class DataBaseConnection {
         return statement.executeUpdate();
     }
 
+    public static ResultSet query(String query, String nombre) {
+        ResultSet rs = null;
+        try {
+            Connection conn = getConnection();
+            Map<String, Object> params = new HashMap<>();
+            params.put("nombre", nombre);
+            String statement = query;
+            Statement stm = conn.prepareStatement(statement);
+            rs = stm.executeQuery(nombre);
+        } catch (SQLException e) {
+            System.out.println("Error durante query");
+
+
+        }
+        return rs;
+    }
 }
 
