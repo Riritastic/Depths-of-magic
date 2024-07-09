@@ -40,7 +40,7 @@ public class Enemy {
         this.hitbox.width = 16;
         this.hitbox.height = 16;
         try {
-            this.textura = new Texture(nombre);
+            this.textura = new Texture(nombre+".png");
         }catch (Exception e){
             this.textura = new Texture("Slime");
             System.out.println("No existe asset para "+nombre+", se uso Slime en su lugar");
