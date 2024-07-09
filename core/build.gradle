@@ -33,3 +33,6 @@ dependencies {
   api "net.onedaybeard.artemis:artemis-odb:$artemisOdbVersion"
   api "space.earlygrey:shapedrawer:$shapeDrawerVersion"
 }
+dependencies {
+  implementation 'mysql:mysql-connector-java:8.0.33'
+}

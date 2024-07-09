@@ -33,7 +33,7 @@ public class GameScreen implements Screen {
         initializeGraph();
 
         // Inicializar jugador
-        player = new Player(new Vector2(300, 300)); // Posición inicial, salud
+        player = new Player(1, 200, 200, new Vector2(10,10)); // Posición inicial, salud
 
         // Inicializar enemigos
         enemies.add(new Enemy(new Vector2(100, 100), graph,"Goblin")); // Posición inicial,  daño

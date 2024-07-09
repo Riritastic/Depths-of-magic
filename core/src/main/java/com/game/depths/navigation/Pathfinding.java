@@ -20,7 +20,7 @@ public class Pathfinding {
         pathFinder.searchNodePath(startNode, endNode, new Heuristic(), outPath);
     }
 
-    private class Heuristic implements com.badlogic.gdx.ai.pfa.Heuristic<NavNode> {
+    private static class Heuristic implements com.badlogic.gdx.ai.pfa.Heuristic<NavNode> {
         @Override
         public float estimate(NavNode node, NavNode endNode) {
             return node.getPosition().dst(endNode.getPosition());

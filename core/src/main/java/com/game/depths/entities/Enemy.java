@@ -18,7 +18,7 @@ import java.sql.Statement;
 public class Enemy {
     private String nombre;
     private Rectangle hitbox;
-    private Texture textura;
+    private static Texture textura;
     private Vector2 position;
     private final NavGraph graph;
     private final Pathfinding pathfinding;
@@ -40,9 +40,9 @@ public class Enemy {
         this.hitbox.width = 16;
         this.hitbox.height = 16;
         try {
-            this.textura = new Texture(nombre);
+            textura = new Texture(""+nombre+".png");
         }catch (Exception e){
-            this.textura = new Texture("Slime");
+            textura = new Texture("Slime");
             System.out.println("No existe asset para "+nombre+", se uso Slime en su lugar");
         }
         ResultSet resultSet = DataBaseConnection.query("SELECT * FROM monster WHERE nombre = ?",nombre);
@@ -73,6 +73,9 @@ public class Enemy {
         NavNode endNode = graph.getNodeAt(player.getPosition());
         pathfinding.searchNodePath(startNode, endNode, path);
         currentNodeIndex = 0;
+    }
+    public Texture getTextura(){
+        return Enemy.textura;
     }
 
     private void moveAlongPath() {

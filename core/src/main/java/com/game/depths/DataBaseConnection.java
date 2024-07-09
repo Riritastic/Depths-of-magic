@@ -1,8 +1,7 @@
 package com.game.depths;
 
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class DataBaseConnection {
 
@@ -10,12 +9,13 @@ public class DataBaseConnection {
     private static final String USER = "root"; // Cambia a tu usuario de MySQL
     private static final String PASSWORD = ""; // Cambia a tu contraseña de MySQL
     private static Connection connection = null;
+    private static String classpath = System.getenv("CLASSPATH;");
 
     public static Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-
+                System.out.println(classpath);
                 connection = DriverManager.getConnection(URL, USER, PASSWORD);
                 System.out.println("Conexión a la base de datos establecida.");
             } catch (ClassNotFoundException e) {
@@ -31,7 +31,7 @@ public class DataBaseConnection {
                 connection.close();
                 System.out.println("Conexión a la base de datos cerrada.");
             } catch (SQLException e) {
-                System.out.println("Error en cerrar la conexión");
+                System.out.println("Error al cerrar la conexión");
             }
         }
     }
@@ -52,17 +52,38 @@ public class DataBaseConnection {
         ResultSet rs = null;
         try {
             Connection conn = getConnection();
-            Map<String, Object> params = new HashMap<>();
-            params.put("nombre", nombre);
-            String statement = query;
-            Statement stm = conn.prepareStatement(statement);
-            rs = stm.executeQuery(nombre);
+            PreparedStatement stm = conn.prepareStatement(query);
+            stm.setString(1,nombre);
+            rs = stm.executeQuery();
+
         } catch (SQLException e) {
             System.out.println("Error durante query");
 
 
         }
         return rs;
+    }
+    public static List<Weapon> getWeapons() throws SQLException {
+        List<Weapon> armas = new ArrayList<>();
+        String query = "SELECT * FROM weapon";
+        Connection conn = getConnection();
+        try (Statement stmt = conn.createStatement(); ResultSet resultado = stmt.executeQuery(query)) {
+            while (resultado.next()) {
+                String nombre = resultado.getString("nombre");
+                String tipo = resultado.getString("tipo");
+                int daño = resultado.getInt("daño");
+                int rango = resultado.getInt("rango");
+                Weapon weapon = new Weapon(nombre, tipo, daño, rango,10,10,2,4);
+                armas.add(weapon);
+            }
+        }
+        return armas;
+    }
+
+    public static Weapon getRandomWeapon() throws SQLException {
+        List<Weapon> armas = getWeapons();
+        Random random = new Random();
+        return armas.get(random.nextInt(armas.size()));
     }
 }
 
