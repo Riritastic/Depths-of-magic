@@ -49,8 +49,30 @@ public class Core extends Game {
         initializeGraph();
         font = new BitmapFont();
         heroe = new Player(1, 200, 200, new Vector2(10,10));
-        enemigos.add(new Enemy(new Vector2(100, 100), graph,"Goblin"));
-        enemigos.add(new Enemy(new Vector2(200, 200), graph,"Slime"));
+        Enemy e1 = new Enemy(new Vector2(100, 100), graph,"Goblin");
+        Enemy e2 = new Enemy(new Vector2(400, 400), graph,"Slime");
+        Enemy e3 = new Enemy(new Vector2(800, 400), graph,"Slime");
+        Enemy e4 = new Enemy(new Vector2(600, 400), graph,"Slime");
+        Enemy e5 = new Enemy(new Vector2(900, 400), graph,"Slime");
+        Enemy e6 = new Enemy(new Vector2(1000, 400), graph,"Slime");
+        Enemy e7 = new Enemy(new Vector2(1100, 400), graph,"Slime");
+        Enemy e8 = new Enemy(new Vector2(100, 400), graph,"Slime");
+        Enemy e9 = new Enemy(new Vector2(100, 200), graph,"Slime");
+        Enemy e10 = new Enemy(new Vector2(200, 200), graph,"Slime");
+        Enemy e11 = new Enemy(new Vector2(800, 800), graph,"Slime");
+        Enemy e12 = new Enemy(new Vector2(800, 900), graph,"Slime");
+        enemigos.add(e1);
+        enemigos.add(e2);
+        enemigos.add(e3);
+        enemigos.add(e4);
+        enemigos.add(e5);
+        enemigos.add(e6);
+        enemigos.add(e7);
+        enemigos.add(e8);
+        enemigos.add(e9);
+        enemigos.add(e10);
+        enemigos.add(e11);
+        enemigos.add(e12);
         enemigosIm = enemigos.stream().map(Enemy::getTextura).collect(Collectors.toList());
         try {
             Weapon arma = DataBaseConnection.getRandomWeapon();
@@ -61,7 +83,7 @@ public class Core extends Game {
             System.out.println("Asignación de arma fallo");
         }
         batch = new SpriteBatch();
-        image = new Texture("libgdx.png");
+        image = new Texture("dungeonS.jpg");
         heroeIm = new Texture("Blue_idle_001.png");
         this.setScreen(new MainMenu(this));
     }
@@ -95,14 +117,17 @@ public class Core extends Game {
     @Override
     public void render() {
         super.render();
-
+        heroe.getArma_actual().setPosition(heroe.getPosition());
+        heroe.setPosition(heroe.hitbox.getPosition(new Vector2()));
+        heroe.setPosition(heroe.getPosition());
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, "Kills totales: " + heroe.getKills(), 0, 480);
-        batch.draw(image, 140, 210);
+        batch.draw(image, 0, 0);
+        font.draw(batch, "Kills totales: " + heroe.getKills(), 0, 780);
         batch.draw(heroeIm,heroe.hitbox.x,heroe.hitbox.y);
-        IntStream.range(0, enemigosIm.size()).forEachOrdered(i -> batch.draw(enemigosIm.get(i), (100 * i) + 1, (100 * i) + 1));
+        IntStream.range(0, enemigosIm.size()).
+            forEachOrdered(i -> batch.draw(enemigosIm.get(i), enemigos.get(i).getPosition().x, enemigos.get(i).getPosition().y ));
         batch.end();
         float speed = 200 * Gdx.graphics.getDeltaTime();
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
@@ -118,12 +143,24 @@ public class Core extends Game {
             heroe.hitbox.x += speed;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-
+            for (int i = 0; i < enemigos.size(); i++) {
+                heroe.getArma_actual().atacar(enemigos.get(i));
+                if (!enemigos.get(i).isAlive()) {
+                    enemigos.remove(enemigos.get(i));
+                    enemigosIm.remove(enemigosIm.get(i));
+                    heroe.incrementarKills();
+                    break;
+                }
+            }
         }
         if (heroe.hitbox.x < 0)
             heroe.hitbox.x = 0;
-        if (heroe.hitbox.x > 800 - 64)
-            heroe.hitbox.x = 800 - 64;
+        if (heroe.hitbox.x > 1200 - 78)
+            heroe.hitbox.x = 1200 - 78;
+        if(heroe.hitbox.y < 0)
+            heroe.hitbox.y=0;
+        if(heroe.hitbox.y>800-91)
+            heroe.hitbox.y=800-91;
 
 
     }

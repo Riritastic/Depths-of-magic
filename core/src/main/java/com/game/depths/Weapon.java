@@ -2,6 +2,8 @@ package com.game.depths;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.game.depths.entities.Enemy;
 
 public class Weapon {
     private String nombre;
@@ -10,6 +12,7 @@ public class Weapon {
     private int rango;
     private Rectangle hitbox;
     private Texture textura;
+    private Vector2 position;
 
     public Weapon(String nombre, String tipo, int daño, int rango, float x, float y, float ancho, float alto) {
         this.nombre = nombre;
@@ -18,6 +21,27 @@ public class Weapon {
         this.rango = rango;
         this.hitbox = new Rectangle(x, y, ancho, alto);
     }
+
+    public void atacar(Enemy enemy) {
+        if (hitbox.overlaps(enemy.getHitbox())) {
+            enemy.recibirDaño(daño);
+            System.out.println("El arma " + this.nombre + " hizo " + this.daño + " de daño a " + enemy.getNombre());
+        }else{
+
+        }
+    }
+
+    public Texture getTextura() {
+        return textura;
+    }
+    public void setPosition(Vector2 position) {
+        this.position = position;
+        this.hitbox.setPosition(position);
+    }
+    public Vector2 getPosition() {
+        return position;
+    }
+
 
     public Rectangle getHitbox() {
         return hitbox;

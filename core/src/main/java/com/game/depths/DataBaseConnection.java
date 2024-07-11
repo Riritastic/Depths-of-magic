@@ -9,13 +9,11 @@ public class DataBaseConnection {
     private static final String USER = "root"; // Cambia a tu usuario de MySQL
     private static final String PASSWORD = ""; // Cambia a tu contraseña de MySQL
     private static Connection connection = null;
-    private static String classpath = System.getenv("CLASSPATH;");
 
     public static Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                System.out.println(classpath);
                 connection = DriverManager.getConnection(URL, USER, PASSWORD);
                 System.out.println("Conexión a la base de datos establecida.");
             } catch (ClassNotFoundException e) {

@@ -27,6 +27,13 @@ public class Player {
         hitbox.width = 78;
         hitbox.height = 91;
     }
+    public void ataque(Enemy enemy) {
+        arma_actual.setPosition(position);
+        arma_actual.atacar(enemy);
+        if (enemy.getHp() <= 0) {
+            kills++;
+        }
+    }
 
     public void asignarArma(Weapon weapon) {
         this.arma_actual = weapon;

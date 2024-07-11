@@ -37,12 +37,12 @@ public class Enemy {
         this.hitbox = new Rectangle();
         this.hitbox.x = position.x;
         this.hitbox.y = position.y;
-        this.hitbox.width = 16;
-        this.hitbox.height = 16;
+        this.hitbox.width = 48;
+        this.hitbox.height = 48;
         try {
             textura = new Texture(""+nombre+".png");
         }catch (Exception e){
-            textura = new Texture("Slime");
+            textura = new Texture("SlimeM");
             System.out.println("No existe asset para "+nombre+", se uso Slime en su lugar");
         }
         ResultSet resultSet = DataBaseConnection.query("SELECT * FROM monster WHERE nombre = ?",nombre);
@@ -57,13 +57,32 @@ public class Enemy {
             System.out.println("Query no exitosa");
         }
     }
+    public void recibirDaño(int daño) {
+        this.hp -= daño;
+        if (this.hp <= 0) {
+            this.hp = 0;
+
+            System.out.println(nombre + " ha muerto");
+        }
+    }
+
+    public int getHp() {
+        return hp;
+    }
 
     public Vector2 getPosition() {
         return position;
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
     public void setPosition(Vector2 position) {
         this.position = position;
+    }
+    public Rectangle getHitbox() {
+        return hitbox;
     }
 
 
@@ -87,5 +106,9 @@ public class Enemy {
         } else {
             path.clear();
         }
+    }
+    public boolean isAlive() {
+
+        return this.hp > 0;
     }
 }
